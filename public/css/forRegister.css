@@ -1,0 +1,23 @@
+#root {
+    height: auto;
+}
+
+.App {
+    height: auto;
+}
+
+.MuiGrid-root {
+    height: auto;
+}
+
+@media(min-height:850px) {
+    #root {
+        height: fit-content;
+    }
+    .App {
+        height: fit-content;
+    }
+    .MuiGrid-root {
+        height: fit-content;
+    }
+}

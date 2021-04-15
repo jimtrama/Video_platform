@@ -1,0 +1,143 @@
+@font-face {
+    font-family: Roboto;
+    src: url('./../Fonts/Roboto/Roboto-Black.ttf');
+}
+
+@font-face {
+    font-family: RobotoBold;
+    src: url('./../Fonts/Roboto/Roboto-Bold.ttf');
+}
+
+@font-face {
+    font-family: RobotoMedium;
+    src: url('./../Fonts/Roboto/Roboto-Medium.ttf');
+}
+
+@font-face {
+    font-family: RobotoLight;
+    src: url('./../Fonts/Roboto/Roboto-Light.ttf');
+}
+
+@font-face {
+    font-family: RobotoRegular;
+    src: url('./../Fonts/Roboto/Roboto-Regular.ttf');
+}
+
+.forgotPageRoot {
+    background-color: #f7fafc;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10vh;
+    height: 100vh;
+}
+
+.logo {
+    background-image: url('./../Images/favicon.png');
+    height: 65px;
+    width: 60px;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3.5vh;
+    min-width: 62px;
+    cursor: pointer;
+}
+
+.cardc {
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #ffffff;
+    width: 620px;
+    height: 60%;
+    padding: 16px 40px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-between;
+    min-height: 360px;
+}
+
+.headingTitle {
+    display: inherit;
+    flex-direction: inherit;
+}
+
+.title {
+    text-align: start;
+    font-size: 30px;
+    font-family: RobotoMedium;
+}
+
+.titlep {
+    text-align: start;
+    margin-top: 4px;
+    font-family: RobotoRegular;
+    font-size: 17px;
+}
+
+.inputContainer {
+    margin-top: 32px;
+    display: inherit;
+    flex-direction: inherit;
+}
+
+.inputTitle {
+    text-align: start;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 17px;
+    font-family: RobotoRegular;
+}
+
+.inputtxt {
+    text-align: start;
+    border: 2px solid #AEAEAE;
+    border-radius: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 4px;
+    transition: ease-in 0.2s;
+}
+
+.inputtxt:hover {
+    border: 2px solid #FFAD7D;
+}
+
+.inputtxt:focus {
+    border: 2px solid #FFAD7D !important;
+}
+
+.button {
+    background-color: #FFAD7D;
+    color: white;
+    border-radius: 5px;
+    margin-top: 32px;
+    padding: 12px;
+    min-height: 50px;
+    line-height: 0;
+    font-size: 21px;
+}
+
+.back-to-signin {
+    font-size: 18px;
+    margin: 8px auto;
+    cursor: pointer;
+    width: fit-content;
+    font-family: RobotoMedium;
+    color: #4252e1 !important;
+}
+
+@media(max-width:1020px) {
+    .cardc {
+        padding-left: 16px;
+    }
+}
+
+@media(max-width:670px) {
+    .cardc {
+        width: calc(99% - 20px);
+    }
+}

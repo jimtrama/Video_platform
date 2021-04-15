@@ -1,0 +1,202 @@
+.MuiPaper-elevation0>div {
+    background-color: #ffe8df;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.unread {
+    background-color: #fff6f6 !important;
+}
+
+.read {
+    background-color: #f9f9f9 !important;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.MuiAccordion-root {
+    margin-top: 5px;
+}
+
+.MuiAccordion-root:before {
+    height: 0 !important;
+}
+
+.MuiAccordion-root.Mui-expanded {
+    margin-top: 5px !important;
+}
+
+.MuiPaper-elevation1 {
+    box-shadow: none !important;
+}
+
+.AcordionBarRoot {
+    display: flex;
+    margin-left: 10px;
+    justify-content: space-between;
+    background-color: #f2eeef !important;
+    border: none !important;
+}
+
+.AcordionBarContent {
+    display: flex;
+    vertical-align: middle;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.AcordionBarNumber {
+    margin-right: 15px;
+    background-color: #fca676;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 31px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.AcordionBarTitle {
+    color: #fca676;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.AcordionRoot {
+    padding-left: 10px;
+}
+
+.AcordionBarActions {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.binIcon {
+    position: absolute !important;
+    right: 25px;
+}
+
+.checkIcon {
+    position: absolute !important;
+    right: 90px;
+}
+
+.AcordionHeading {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    flex-basis: 33.33%;
+    flex-shrink: 0;
+    color: black;
+    max-width: 30px;
+    margin-right: 20px !important;
+}
+
+.AcordionSecondaryHeading {
+    font-size: 12px !important;
+}
+
+.cardFooter {
+    font-size: 15px;
+    font-weight: 700 !important;
+    flex-basis: 33.33%;
+    flex-shrink: 0;
+    margin-left: 0;
+}
+
+.cardContainerFotter {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    border: none !important;
+}
+
+.cardContainerContent {
+    display: flex;
+    justify-content: space-evenly;
+    min-width: 80%;
+}
+
+.cardContainerTitle {
+    vertical-align: middle;
+    line-height: 50px !important;
+    font-size: 20px !important;
+    color: black;
+}
+
+.CardBarActions {
+    width: 100%;
+}
+
+.Pie {
+    height: 50px;
+    width: 50px;
+}
+
+.UpgradeBtn {
+    border: 1px solid !important;
+    background-color: #fe6308 !important;
+    color: white !important;
+    border-radius: 0 !important;
+    width: 150% !important;
+}
+
+@media(max-width:1062px) {
+    .cardsContainerRes {
+        min-height: 186px;
+        flex-grow: 0 !important;
+        max-width: 100% !important;
+        flex-basis: 100% !important;
+    }
+    .AcordionRoot {
+        width: 100%;
+        padding-left: 0px;
+        flex-grow: 0 !important;
+        max-width: 100% !important;
+        flex-basis: 100% !important;
+    }
+    .AcordionBarRoot {
+        margin-left: 0;
+        margin-top: 20px;
+        flex-grow: 0 !important;
+        max-width: 100% !important;
+        flex-basis: 100% !important;
+    }
+    .AcordionBarActions {
+        margin: 0 auto;
+    }
+    .cardContainerTitle {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+    }
+    .cardContainerContent {
+        min-width: 60%;
+    }
+}
+
+@media(max-width:496px) {
+    .cardTitle {
+        max-width: 150px;
+    }
+}
+
+@media(max-width:414px) {
+    .cardTitle {
+        max-width: 108px;
+    }
+}
+
+@media(max-width:402px) {
+    .binIcon {
+        right: 5%
+    }
+    .checkIcon {
+        right: 50%
+    }
+}

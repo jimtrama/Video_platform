@@ -1,0 +1,199 @@
+.addVideoModalContainer {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.addVideoContainer {
+    width: 50%;
+    height: 50%;
+    background-color: white;
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+}
+
+.inputContainer {
+    margin: 10px auto;
+    width: fit-content;
+}
+
+.inputContainerSec {
+    margin: 10px auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputContainerFirst {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.addVideoTitle {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    border: 2px solid #f6bf9e;
+    border-radius: 4px;
+    padding-left: 6px;
+}
+
+.addVideoUrl {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    border: 2px solid #f6bf9e;
+    border-radius: 4px;
+    padding-left: 6px;
+}
+
+.addVideoDomains {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    border: 2px solid #f6bf9e;
+    border-radius: 4px;
+    padding-left: 6px;
+}
+
+.switchContainer {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.MuiSwitch-track {
+    opacity: 0.2 !important;
+}
+
+.coloredTrack {
+    background-color: black !important;
+}
+
+.MuiSwitch-colorSecondary {
+    color: #fe6308 !important;
+}
+
+.filesContainer {
+    display: flex;
+}
+
+.filePicker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    width: fit-content;
+    cursor: pointer;
+    width: 160px;
+    height: 30px;
+}
+
+.filePicker>.MuiSvgIcon-root {
+    background-color: chocolate;
+    border-radius: 50%;
+    font-size: 30px;
+    padding: 3px;
+    color: white;
+    position: absolute;
+    left: 0;
+}
+
+.labelFileInput {
+    margin-bottom: 0 !important;
+    height: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    width: 160px;
+    height: 30px;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    position: absolute;
+}
+
+.labelFileInput>span {
+    position: absolute;
+    left: 35px;
+    top: 50%;
+    transform: translate(0, -50%)
+}
+
+#file {
+    display: none;
+}
+
+#thumbnail {
+    display: none;
+}
+
+.addVideoBtn {
+    background-color: #fe6308;
+    color: white;
+    padding: 5px 20px;
+    border-radius: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    width: fit-content;
+}
+
+@media(max-width:670px) {
+    .filesContainer {
+        flex-direction: column;
+    }
+}
+
+@media(max-height:580px) and (max-width:670px) {
+    .addVideoContainer {
+        height: 60%;
+    }
+}
+
+@media (min-height:580px) and (max-width:670px) {
+    .inputContainerFirst {
+        margin-top: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+    .addVideoContainer {
+        padding-top: 5%;
+        height: 30rem;
+        width: 70%;
+    }
+    .inputContainerSec {
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+    .addVideoBtn {
+        margin-top: 40px;
+    }
+}
+
+@media (max-width:375px) {
+    .inputContainerFirst {
+        max-width: 100%;
+    }
+    .inputContainerFirst>input {
+        max-width: 100%;
+    }
+    .inputContainerSec {
+        max-width: 100%;
+    }
+    .inputContainerSec>input {
+        max-width: 100%;
+    }
+    .filesContainer>.inputContainer {
+        max-width: 100%;
+    }
+    .filesContainer>.inputContainer>input {
+        max-width: 100%;
+    }
+}
