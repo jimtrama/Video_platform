@@ -1,4 +1,4 @@
-
+//test
 import './App.css';
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import LoginPage from './Login/index'
@@ -13,11 +13,11 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route exact path='/' component={LoginPage} />
-                    <Route exact path='/register' component={RegisterPage}/>
-                    <Route exact path='/dashboard' component={DashboardPage}/>
-                    <Route exact path='/passrecovery' component={ForgotPassPage}/>
-                    <Route exact path='/settings' component={SettingsPage}/>
-                    <Route exact path='/videos' component={VideosPage}/>
+                    <Route exact path='/register' component={RegisterPage} />
+                    <Route exact path='/dashboard' component={DashboardPage} />
+                    <Route exact path='/passrecovery' component={ForgotPassPage} />
+                    <Route exact path='/settings' component={SettingsPage} />
+                    <Route exact path='/videos' component={VideosPage} />
 
                 </Switch>
             </div>
