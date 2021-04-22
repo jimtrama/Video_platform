@@ -154,7 +154,7 @@
     top: -50px;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30%;
+    width: fit-content;
     height: 50px;
     z-index: 100000000000;
     background-color: #ff8f4f;
@@ -164,7 +164,9 @@
     font-style: italic;
     font-family: RobotoBold;
     font-size: 25px;
-    color: white
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .fadeinLinkCopied {

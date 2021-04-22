@@ -167,12 +167,13 @@ function Videos({ history }) {
   const [dataToShow, setDataToShow] = useState([]);
 
   const [videoOfOptions, setvideoOfOptions] = useState({})
-
+  const [cookiesession, setCookiesession] = useState("");
   useEffect(() => {
     async function load() {
       let myHeaders = new Headers();
       let strSeesion = "";
       let cookie = User.session;
+      console.log(cookie);
       let tempcountcookie = 0;
       for (let key in cookie) {
         if (tempcountcookie == 2) {
@@ -184,6 +185,8 @@ function Videos({ history }) {
         tempcountcookie++;
 
       }
+      console.log(strSeesion);
+      setCookiesession(strSeesion)
       myHeaders.append("Cookie", strSeesion);
       let requestOptions = {
         method: "GET",
@@ -198,7 +201,7 @@ function Videos({ history }) {
         requestOptions
       )
       let dataAll = await res.json();
-
+      console.log(dataAll);
 
       requestOptions = {
         method: "GET",
@@ -320,7 +323,7 @@ function Videos({ history }) {
   function GetLink() {
 
     const el = document.createElement('textarea');
-    el.value = "https://privyrabbit.club/playback/" + videoOfOptions.video.id;
+    el.value = "http://privy-rabbit.club/playback/" + videoOfOptions.video.id;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
@@ -361,24 +364,34 @@ function Videos({ history }) {
       setUrlVideo(!urlVideo);
     };
     async function addVideo() {
-      let file = document.getElementById("file");
+      let formdata = new FormData();
+      if (!urlVideo) {
+        let file = document.getElementById("file");
+        formdata.append("videofile", file.files[0]);
+      }
+      else {
+        formdata.append("srcUrl", document.getElementById("url").value);
+      }
+
       let title = document.getElementById("title");
-      let domains = document.getElementById("domains");
-      var myHeaders = new Headers();
+      let domains = document.getElementById("domains").value;
+      let myHeaders = new Headers();
       myHeaders.append("CSRF-Token", User.csrftoken);
 
-      var formdata = new FormData();
-      formdata.append("videofile", file.files[0]);
-      //formdata.append("thumbnail", fileInput.files[0], "/path/to/file");
+
+
+      //if (fileInput.files)
+      //formdata.append("thumbnail", fileInput.files[0]);
+
       formdata.append("title", title);
-      //formdata.append("srcUrl", "");
-      //formdata.append("isGoogleVideo", "1");
-      //formdata.append("playInDomains", "privyplay.com fiddle.jshell.net jsfiddle.net");
+
+      formdata.append("isGoogleVideo", "1");
+      formdata.append("playInDomains", "privyplay.com fiddle.jshell.net jsfiddle.net " + domains);
       formdata.append("mediaType", "mp4");
 
       var requestOptions = {
         method: "PUT",
-        headers: {},
+        headers: myHeaders,
         body: formdata,
         redirect: "follow",
       };
