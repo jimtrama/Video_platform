@@ -85,7 +85,7 @@ function Settings(props) {
       var urlencoded = new URLSearchParams();
       urlencoded.append("username", username);
       urlencoded.append("password", password);
-      let body = {
+      let options = {
         method: "POST",
         credentials: "include",
         withCredentials: true,
@@ -98,21 +98,19 @@ function Settings(props) {
       };
       let res = await fetch(
         process.env.REACT_APP_API_BASE + "/account/rest-api/login",
-        body
+        options
       );
-      setInterval(() => {
-        console.log(Cookie.get("_csrf"));
-      }, 4000);
-      console.log(res.headers);
-      console.log(res);
-      console.log(document.cookie);
+
+
       let data = await res.json();
       console.log(data);
 
       if (data.success == true) {
         if ((data.message.userActive = true)) {
-          props.history.replace("/dashboard");
           dispach(user(data));
+          props.history.replace("/dashboard");
+
+
         } else {
           console.log("plesea verify email");
           setAlert(true);

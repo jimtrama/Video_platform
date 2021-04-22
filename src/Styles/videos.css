@@ -59,6 +59,7 @@
 }
 
 .videoCard {
+    position: relative;
     background-color: #ffe8df;
     margin-top: 20px;
     margin-left: 10px;
@@ -68,6 +69,7 @@
     z-index: 0;
     width: 23%;
     min-width: 230px;
+    padding-bottom: 40px;
 }
 
 @media(max-width:1000px) {
@@ -95,9 +97,10 @@ img {
 }
 
 .moreOptionsContainer {
-    width: 100%;
+    width: 90%;
     text-align: right;
-    position: relative;
+    position: absolute;
+    bottom: 0;
 }
 
 .videoOptions {
@@ -106,19 +109,120 @@ img {
 }
 
 .optionsMenu {
-    display: none;
-    height: 100px;
+    position: absolute;
+    height: 150px;
     width: 150px;
     z-index: 1;
-    transform: translate(-10px, 30px);
+    top: 50%;
+    padding: 0 !important;
+    left: -200px;
+    transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 10px;
     text-align: center;
     border: 3px solid #fe6308;
 }
 
+@media (max-height:662px) {
+    .optionsMenu {
+        top: 70%
+    }
+}
+
+.optionsContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fadeInOptions {
+    animation-name: fadeInOptions;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInOptions {
+    from {
+        left: -200px;
+    }
+    to {
+        left: 50%;
+    }
+}
+
+.fadeToggleOptions {
+    animation-name: fadeToggleOptions;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeToggleOptions {
+    0% {
+        left: 50%;
+    }
+    50% {
+        left: -200px;
+    }
+    100% {
+        left: 50%;
+    }
+}
+
+.fadeFromToggleOptions {
+    animation-name: fadeFromToggleOptions;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeFromToggleOptions {
+    0% {
+        left: 50%;
+    }
+    50% {
+        left: -200px;
+    }
+    100% {
+        left: 50%;
+    }
+}
+
+.fadeOutOptions {
+    animation-name: fadeOutOptions;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeOutOptions {
+    0% {
+        left: 50%;
+    }
+    100% {
+        left: -200px;
+    }
+}
+
+.helpingOptionsContainer {
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+}
+
+.closeOptionsBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 .showOptionsConteiner {
-    padding-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     cursor: pointer;
 }
 

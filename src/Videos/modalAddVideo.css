@@ -146,6 +146,58 @@
     width: fit-content;
 }
 
+.LinkCopied {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 50px;
+    z-index: 100000000000;
+    background-color: #ff8f4f;
+    /* border: 1px solid #fe8347; */
+    border: 5px solid white;
+    border-radius: 10px;
+    font-style: italic;
+    font-family: RobotoBold;
+    font-size: 25px;
+    color: white
+}
+
+.fadeinLinkCopied {
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        top: -40px;
+    }
+    to {
+        top: 50px;
+    }
+}
+
+.fadeoutLinkCopied {
+    animation-name: fadeOut;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
+}
+
+@keyframes fadeOut {
+    from {
+        top: 50px;
+    }
+    to {
+        top: -40px;
+    }
+}
+
 @media(max-width:670px) {
     .filesContainer {
         flex-direction: column;

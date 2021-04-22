@@ -26,14 +26,16 @@ import { Dropdown } from "react-bootstrap";
 import { Avatar, Modal } from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
-
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import SubscriptionsSharpIcon from "@material-ui/icons/SubscriptionsSharp";
 import AssignmentTurnedInSharpIcon from "@material-ui/icons/AssignmentTurnedInSharp";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import SettingsSharpIcon from "@material-ui/icons/SettingsSharp";
 
 import Img from "./../videosImg/1.jpg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { user } from "../Actions";
 
 let data = {
   videos: [
@@ -151,7 +153,8 @@ const useStylesDrawer = makeStyles((theme) => ({
 }));
 function Videos({ history }) {
   let User = useSelector((state) => state.persistedStore.message);
-
+  console.log(User);
+  const dispach = useDispatch();
   const mobileDrawer = window.innerWidth > 861;
   const classes = useStylesDrawer();
   const theme = useTheme();
@@ -161,38 +164,105 @@ function Videos({ history }) {
   const [addVideoModal, setAddVideoModal] = useState(false);
 
   const [data, setData] = useState([]);
+  const [dataToShow, setDataToShow] = useState([]);
+
+  const [videoOfOptions, setvideoOfOptions] = useState({})
 
   useEffect(() => {
-    let requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
+    async function load() {
+      let myHeaders = new Headers();
+      let strSeesion = "";
+      let cookie = User.session;
+      let tempcountcookie = 0;
+      for (let key in cookie) {
+        if (tempcountcookie == 2) {
+          strSeesion += "" + key + cookie[key]
+        } else {
+          strSeesion += "" + key + cookie[key] + ";"
+        }
 
-    fetch(
-      process.env.REACT_APP_API_BASE + "/account/rest-api/getVideos/all/20/asc",
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => console.log("error", error));
+        tempcountcookie++;
+
+      }
+      myHeaders.append("Cookie", strSeesion);
+      let requestOptions = {
+        method: "GET",
+        redirect: "follow",
+        credentials: "include",
+        withCredentials: true,
+        headers: myHeaders
+      };
+
+      let res = await fetch(
+        process.env.REACT_APP_API_BASE + "/account/rest-api/getVideos/all/20/asc",
+        requestOptions
+      )
+      let dataAll = await res.json();
+
+
+      requestOptions = {
+        method: "GET",
+        redirect: "follow",
+        headers: myHeaders
+      };
+      setCountVideos(dataAll.message.res.length)
+      let tempArray = [];
+      for (let i = 0; i < dataAll.message.res.length; i++) {
+        res = await fetch(
+          process.env.REACT_APP_API_BASE + "/playback/poster/" + dataAll.message.res[i].documentId,
+          requestOptions
+        )
+        let dataThumb = await res.blob();
+        tempArray.push({ image: dataThumb, title: dataAll.message.res[i].title, id: dataAll.message.res[i].documentId });
+      }
+
+      setData(tempArray.reverse());
+      setDataToShow(tempArray);
+      //addzIndex();
+
+
+    }
+    load();
+
+
   }, []);
+  // const addzIndex = () => {
+  //   let imgzindex = 0;
+  //   for (let i = document.getElementsByClassName('videoCard').length - 1; i >= 0; i--) {
+  //     document.getElementsByClassName('videoCard')[i].style.zIndex = imgzindex * 10;
+  //     imgzindex += 10
+  //   }
+  // }
 
   function addVideo() {
     setAddVideoModal(true);
   }
   function Search(input) {
+    console.log(data);
+    console.log(input);
+    let tempArr = [];
     input = input.toLowerCase().trim();
-    for (let video in data.videos) {
-      if (video.title !== input) {
+    for (let video of data) {
+      if (video.title.toLowerCase().trim().includes(input)) {
+        tempArr.push(video)
       }
     }
+    setDataToShow(tempArr)
+    //addzIndex();
   }
 
-  function LogOut() {
+  async function LogOut() {
     //Logout happens
-    history.replace("/");
+
+    let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
+    let data = await res.json();
+    if (data.message.loggedout) {
+
+      history.replace("/");
+      dispach(user({ loggedin: false }));
+
+    }
+
   }
 
   const handleDrawerOpen = () => {
@@ -202,21 +272,71 @@ function Videos({ history }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handelOptionsChange = (i) => {
-    if (document.getElementById("menu" + i).getAttribute("value") == "close") {
-      document.getElementById("menu" + i).classList.add("showOptions");
-      document.getElementById("menu" + i).setAttribute("value", "open");
-    } else {
-      document.getElementById("menu" + i).classList.remove("showOptions");
-      document.getElementById("menu" + i).setAttribute("value", "close");
+  const handelOptionsOpen = (video, i) => {
+    if (!open) {
+      setOpen(true)
     }
+    if (i == videoOfOptions.i) {
+      handelOptionsClose();
+      setOpen(false);
+      return;
+    }
+    if (document.getElementById("menu").classList.contains("fadeInOptions")) {
+      document.getElementById("menu").classList.remove("fadeInOptions");
+      document.getElementById("menu").classList.add("fadeToggleOptions");
+
+      setvideoOfOptions(video);
+    } else
+      if (document.getElementById("menu").classList.contains("fadeToggleOptions")) {
+        document.getElementById("menu").classList.remove("fadeToggleOptions");
+        document.getElementById("menu").classList.add("fadeFromToggleOptions");
+
+      } else if (document.getElementById("menu").classList.contains("fadeFromToggleOptions")) {
+        document.getElementById("menu").classList.add("fadeToggleOptions");
+        document.getElementById("menu").classList.remove("fadeFromToggleOptions");
+      } else {
+        document.getElementById("menu").classList.add("fadeInOptions");
+        document.getElementById("menu").classList.remove("fadeOutOptions");
+      }
+
+    setvideoOfOptions({ video, i });
+
   };
-  function Edit(i) {}
-  function Delete(i) {
-    data.videos.splice(i, 1);
-    console.log(data);
+  const handelOptionsClose = () => {
+    document.getElementById("menu").classList.remove("fadeInOptions");
+    document.getElementById("menu").classList.remove("fadeToggleOptions");
+    document.getElementById("menu").classList.add("fadeOutOptions");
+    setvideoOfOptions({});
+
+  };
+  function Edit() { }
+  function Delete() {
+    let tempArra = dataToShow;
+    tempArra.splice(videoOfOptions.i, 1);
+    handelOptionsClose();
+    setDataToShow(tempArra);
+
   }
-  function GetLink(i) {}
+  function GetLink() {
+
+    const el = document.createElement('textarea');
+    el.value = "https://privyrabbit.club/playback/" + videoOfOptions.video.id;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+
+
+
+    document.getElementById("copylink").classList.add("fadeinLinkCopied")
+    document.getElementById("copylink").classList.remove("fadeoutLinkCopied")
+    setTimeout(() => {
+      document.getElementById("copylink").classList.remove("fadeinLinkCopied")
+      document.getElementById("copylink").classList.add("fadeoutLinkCopied")
+    }, 1500)
+
+
+  }
   function AddVideoModal() {
     const [openModal, setOpenModal] = useState(false);
     const [urlVideo, setUrlVideo] = useState(false);
@@ -395,12 +515,13 @@ function Videos({ history }) {
                 variant="Secondary"
                 id="dropdown-basic"
               >
-                Yash Pal
+                {User.usernames}
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                <Dropdown.Item href="/#/dashboard">Dashboard</Dropdown.Item>
+                <Dropdown.Item href="#">Videos</Dropdown.Item>
+                <Dropdown.Item href="/#/settings">Settings</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={LogOut}>Log out</Dropdown.Item>
               </Dropdown.Menu>
@@ -477,13 +598,50 @@ function Videos({ history }) {
             </>
           }
         </List>
+        <Divider />
+        <div className="optionsMenu" id="menu" >
+          <div className="optionsContainer">
+            <button className="closeOptionsBtn" onClick={() => { handelOptionsClose(); setOpen(false) }}><CancelRoundedIcon /></button>
+            <div className="helpingOptionsContainer">
+              <div
+                className="showOptionsConteiner"
+
+                onClick={() => {
+                  Delete();
+                }}
+              >
+                <span>Delete</span>
+              </div>
+              <div
+                className="showOptionsConteiner"
+                onClick={() => {
+                  Edit();
+                }}
+              >
+                <span>Edit</span>
+              </div>
+              <div
+                className="showOptionsConteiner"
+                onClick={() => {
+                  GetLink();
+                }}
+              >
+                <span>Get Video Link</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </Drawer>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
+        <div id="copylink" className="LinkCopied">
+          Link copied
+        </div>
         <div className={classes.drawerHeader} />
+
 
         <div className="secondHeader">
           <input
@@ -507,46 +665,27 @@ function Videos({ history }) {
           </div>
         </div>
         <div className="videosContainer">
-          {data.map((value, i) => {
+          {dataToShow.map((value, i) => {
+            let tempImg;
+
+            const url = URL.createObjectURL(value.image)
+            tempImg = url;
+
+
             return (
               <div className="videoCard">
                 <span className="videoTitle">{value.title}</span>
                 <div className="videoImg">
-                  <img src={Img}></img>
+                  <img src={tempImg}></img>
                 </div>
                 <div className="moreOptionsContainer">
                   <MoreHorizIcon
                     className="videoOptions"
                     onClick={() => {
-                      handelOptionsChange(i);
+                      handelOptionsOpen(value, i);
                     }}
                   />
-                  <div className="optionsMenu" id={"menu" + i} value="close">
-                    <div
-                      className="showOptionsConteiner"
-                      onClick={() => {
-                        Delete(i);
-                      }}
-                    >
-                      <span>Delete</span>
-                    </div>
-                    <div
-                      className="showOptionsConteiner"
-                      onClick={() => {
-                        Edit(i);
-                      }}
-                    >
-                      <span>Edit</span>
-                    </div>
-                    <div
-                      className="showOptionsConteiner"
-                      onClick={() => {
-                        GetLink(i);
-                      }}
-                    >
-                      <span>Get Video Link</span>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             );

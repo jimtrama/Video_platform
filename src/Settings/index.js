@@ -26,7 +26,8 @@ import { Avatar, Card, CardActions, CardContent, Typography } from '@material-ui
 import SubscriptionsSharpIcon from '@material-ui/icons/SubscriptionsSharp';
 import AssignmentTurnedInSharpIcon from '@material-ui/icons/AssignmentTurnedInSharp';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { user } from '../Actions';
 
 
 
@@ -153,11 +154,13 @@ const useStylesCards = makeStyles({
 });
 
 function Settings({ history }) {
+    let User = useSelector((state) => state.persistedStore.message);
     const [alert, setAlert] = useState(false);
     const [errorType, setErrorType] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const dispach = useDispatch();
     let UserData = useSelector(state => state.User);
     function MyAlert({ field, mclass }) {
         if (alert) {
@@ -282,10 +285,17 @@ function Settings({ history }) {
     const [open, setOpen] = useState(mobileDrawer);
 
 
-    function LogOut() {
+    async function LogOut() {
         //Logout happens
 
-        history.replace("/")
+        let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
+        let data = await res.json();
+        if (data.message.loggedout) {
+
+            history.replace("/");
+            dispach(user({ loggedin: false }));
+
+        }
 
     }
 
@@ -293,7 +303,7 @@ function Settings({ history }) {
         if (errorType == '') {
             let confPassword = document.getElementById('confPassword1').value;
             let myHeaders = new Headers();
-            myHeaders.append("CSRF-Token",UserData.message.csrftoken);
+            myHeaders.append("CSRF-Token", UserData.message.csrftoken);
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
             console.log(UserData.message.csrftoken);
             let urlencoded = new URLSearchParams();
@@ -306,7 +316,7 @@ function Settings({ history }) {
                 body: urlencoded,
                 redirect: 'follow'
             };
-            
+
             console.log(requestOptions);
             let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/emailChangeRequest', requestOptions)
             let data = await res.json();
@@ -319,7 +329,7 @@ function Settings({ history }) {
         if (errorType == '') {
             let confPassword = document.getElementById('confPassword2').value;
             let myHeaders = new Headers();
-            myHeaders.append("CSRF-Token",UserData.message.csrftoken);
+            myHeaders.append("CSRF-Token", UserData.message.csrftoken);
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
             console.log(UserData.message.csrftoken);
             let urlencoded = new URLSearchParams();
@@ -332,7 +342,7 @@ function Settings({ history }) {
                 body: urlencoded,
                 redirect: 'follow'
             };
-            
+
             console.log(requestOptions);
             let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/emailChangeRequest', requestOptions)
             let data = await res.json();
@@ -344,7 +354,7 @@ function Settings({ history }) {
         if (errorType == '') {
             let confPassword = document.getElementById('confPassword3').value;
             let myHeaders = new Headers();
-            myHeaders.append("CSRF-Token",UserData.message.csrftoken);
+            myHeaders.append("CSRF-Token", UserData.message.csrftoken);
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
             console.log(UserData.message.csrftoken);
             let urlencoded = new URLSearchParams();
@@ -357,7 +367,7 @@ function Settings({ history }) {
                 body: urlencoded,
                 redirect: 'follow'
             };
-            
+
             console.log(requestOptions);
             let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/passwordChangeRequest', requestOptions)
             let data = await res.json();
@@ -398,12 +408,13 @@ function Settings({ history }) {
                         <Avatar src="" style={{ backgroundColor: "#f8f8f8", color: '#bebebe', border: '2px solid #fca676' }} ></Avatar>
                         <Dropdown>
                             <Dropdown.Toggle style={{ color: '#303030' }} variant="Secondary" id="dropdown-basic">
-                                Yash Pal
-                                </Dropdown.Toggle>
+                                {User.usernames}
+                            </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                <Dropdown.Item href="/#/dashboard">Dashboard</Dropdown.Item>
+                                <Dropdown.Item href="/#/videos">Videos</Dropdown.Item>
+                                <Dropdown.Item href="#">Settings</Dropdown.Item>
                                 <Dropdown.Divider />
                                 <Dropdown.Item onClick={LogOut} >Log out</Dropdown.Item>
                             </Dropdown.Menu>
@@ -424,7 +435,14 @@ function Settings({ history }) {
 
             >
                 <div className={classes.drawerHeader}>
-                    <img src={Logo} onClick={() => { history.replace('/dashboard') }} style={{ cursor: "pointer", justifyContent: "space-between", maxHeight: '50px', maxWidth: '250px' }} />
+                    <img src={Logo} onClick={() => { history.replace('/dashboard') }} style={{
+                        cursor: "pointer",
+                        justifyContent: "space-between",
+                        maxHeight: "50px",
+                        maxWidth: "50px",
+                        marginRight: "auto",
+                        marginLeft: "auto",
+                    }} />
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>

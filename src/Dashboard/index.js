@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './../Styles/dashboard.css'
 
@@ -52,6 +52,7 @@ import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 
 import { PieChart } from 'react-minimal-pie-chart';
 import { LineWeight } from '@material-ui/icons';
+import { user } from '../Actions';
 
 
 const drawerWidth = 180;
@@ -241,8 +242,8 @@ function AcordionNotification() {
     return (
 
         <div className='AcordionRoot'>
-            <Card style={{boxShadow:'none',backgroundColor:'white'}}>
-                <CardContent style={{paddingLeft:'0',paddingRight:'0',boxShadow:'none',paddingTop:'5px',paddingBottom:'5px'}}>
+            <Card style={{ boxShadow: 'none', backgroundColor: 'white' }}>
+                <CardContent style={{ paddingLeft: '0', paddingRight: '0', boxShadow: 'none', paddingTop: '5px', paddingBottom: '5px' }}>
                     {notifications.map((notification, i) => {
                         return (
 
@@ -297,11 +298,20 @@ function Index({ history }) {
         const classes = useStylesDrawer();
         const theme = useTheme();
         const [open, setOpen] = useState(mobileDrawer);
+        let User = useSelector((state) => state.persistedStore.message);
+        const dispach = useDispatch()
 
-
-        function LogOut() {
+        async function LogOut() {
             //Logout happens
-            history.replace('/')
+
+            let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
+            let data = await res.json();
+            if (data.message.loggedout) {
+
+                history.replace("/");
+                dispach(user({ loggedin: false }));
+
+            }
 
         }
 
@@ -335,20 +345,21 @@ function Index({ history }) {
                             <MenuIcon style={{ color: 'black' }} />
                         </IconButton>
                         <span></span>
-                        <div style={{display:"flex"}}>
-                        <Avatar src="" style={{ backgroundColor: "#f8f8f8", color: '#bebebe', border: '2px solid #fca676' }} ></Avatar>
-                        <Dropdown>
-                            <Dropdown.Toggle style={{ color: '#303030' }} variant="Secondary" id="dropdown-basic">
-                                Yash Pal
-                        </Dropdown.Toggle>
+                        <div style={{ display: "flex" }}>
+                            <Avatar src="" style={{ backgroundColor: "#f8f8f8", color: '#bebebe', border: '2px solid #fca676' }} ></Avatar>
+                            <Dropdown>
+                                <Dropdown.Toggle style={{ color: '#303030' }} variant="Secondary" id="dropdown-basic">
+                                    {User.usernames}
+                                </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                <Dropdown.Divider />
-                                <Dropdown.Item onClick={LogOut} >Log out</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="#">Dashboard</Dropdown.Item>
+                                    <Dropdown.Item href="/#/videos">Videos</Dropdown.Item>
+                                    <Dropdown.Item href="/#/settings">Settings</Dropdown.Item>
+                                    <Dropdown.Divider />
+                                    <Dropdown.Item onClick={LogOut} >Log out</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </div>
                     </Toolbar>
 
@@ -365,7 +376,14 @@ function Index({ history }) {
 
                 >
                     <div className={classes.drawerHeader}>
-                        <img src={Logo}  onClick={()=>{history.replace('/dashboard')}}  style={{cursor:"pointer", justifyContent: "space-between", maxHeight: '50px', maxWidth: '250px' }} />
+                        <img src={Logo} onClick={() => { history.replace('/dashboard') }} style={{
+                            cursor: "pointer",
+                            justifyContent: "space-between",
+                            maxHeight: "50px",
+                            maxWidth: "50px",
+                            marginRight: "auto",
+                            marginLeft: "auto",
+                        }} />
                         <IconButton onClick={handleDrawerClose}>
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
@@ -374,23 +392,23 @@ function Index({ history }) {
                     <List style={{ paddingTop: "0px" }}>
                         {
                             (
-                              
-                                
-                                    <>
+
+
+                                <>
                                     <ListItem button key={1} style={{ backgroundColor: "#f7c9b8" }}>
                                         <ListItemIcon style={{ color: "black" }}>{<AssignmentTurnedInSharpIcon />}</ListItemIcon>
                                         <ListItemText primary="Dashboard" />
                                     </ListItem>
-                                    <ListItem button onClick={()=>{history.replace("/videos")}} key={2} >
-                                        <ListItemIcon  style={{ color: "black" }}>{<SubscriptionsSharpIcon />}</ListItemIcon>
-                                        <ListItemText  primary="Videos" />
+                                    <ListItem button onClick={() => { history.replace("/videos") }} key={2} >
+                                        <ListItemIcon style={{ color: "black" }}>{<SubscriptionsSharpIcon />}</ListItemIcon>
+                                        <ListItemText primary="Videos" />
                                     </ListItem>
-                                    <ListItem button onClick={()=>{history.replace("/settings")}} key={3} >
-                                        <ListItemIcon style={{ color: "black" }}>{ <SettingsSharpIcon />}</ListItemIcon>
+                                    <ListItem button onClick={() => { history.replace("/settings") }} key={3} >
+                                        <ListItemIcon style={{ color: "black" }}>{<SettingsSharpIcon />}</ListItemIcon>
                                         <ListItemText primary="Settings" />
                                     </ListItem>
-                                    </>
-                               
+                                </>
+
                             )
                         }
                     </List>
