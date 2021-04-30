@@ -1,8 +1,8 @@
 import { Checkbox, Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import BgImage from "./../Images/LoginBg.png"
-import LogoImg from './../Images/logo.png'
+import BgImage from "./../../Images/LoginBg.png"
+
 
 
 
@@ -175,7 +175,7 @@ function Index(props) {
     }
     const handleCheckbocChange = (event) => {
         setChecked(event.target.checked);
-        if(event.target.checked){
+        if (event.target.checked) {
             setalertchecked(false);
         }
     }
@@ -284,10 +284,10 @@ function Index(props) {
                                 <span className='checkboxTitle'>I accept Privyplay’s terms and conditions</span>
 
                             </div>
-                            <MyAlertChecked/>
+                            <MyAlertChecked />
                             <div class="container-login100-form-btn">
 
-                                
+
                                 <button disabled={buttonDisable} class="login100-form-btn" onClick={SignUp}>Sign Up</button>
 
                             </div>

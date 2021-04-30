@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react'
-import allReducers from './Reducers/index'
+import allReducers from './ReduxStore/Reducers/index'
 
 
 const store = createStore(allReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());

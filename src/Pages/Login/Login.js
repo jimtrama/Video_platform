@@ -1,14 +1,12 @@
-import { Grid, TextField } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import BgImage from "./../Images/LoginBg.png";
-import { user } from "./../Actions";
-import Cookie from "js-cookie";
-import { cook } from "react-cookie";
-import { getCookies } from "cookies-next";
-import "./../Styles/login.css";
+import BgImage from "./../../Images/LoginBg.png";
+import { user } from "../../ReduxStore/Actions";
+import "./login.css";
+import auth from '../../Auth';
 
 function Settings(props) {
   const dispach = useDispatch();
@@ -108,6 +106,7 @@ function Settings(props) {
       if (data.success == true) {
         if ((data.message.userActive = true)) {
           dispach(user(data));
+          auth.logIn();
           props.history.replace("/dashboard");
 
 

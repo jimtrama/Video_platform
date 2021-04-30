@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
-import './../Styles/dashboard.css'
+import './dashboard.css'
 
-import Logo from './../Images/logo.png'
+import Logo from './../../Images/logo.png'
 
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -21,11 +21,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 
-import { Dropdown, Media } from 'react-bootstrap';
-import { Avatar, Badge, Link } from '@material-ui/core';
+import { Dropdown } from 'react-bootstrap';
+import { Avatar } from '@material-ui/core';
 
 
 import Card from '@material-ui/core/Card';
@@ -42,7 +40,6 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import DoneAllOutlinedIcon from '@material-ui/icons/DoneAllOutlined';
 import DeleteSweepOutlinedIcon from '@material-ui/icons/DeleteSweepOutlined';
 
@@ -51,8 +48,8 @@ import AssignmentTurnedInSharpIcon from '@material-ui/icons/AssignmentTurnedInSh
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 
 import { PieChart } from 'react-minimal-pie-chart';
-import { LineWeight } from '@material-ui/icons';
-import { user } from '../Actions';
+import { user } from '../../ReduxStore/Actions';
+import Auth from '../../Auth';
 
 
 const drawerWidth = 180;
@@ -292,7 +289,7 @@ function CardBarFooter() {
         </Card>
     )
 }
-function Index({ history }) {
+function Dashboard({ history }) {
     function PersistentDrawerLeft() {
         const mobileDrawer = window.innerWidth > 861;
         const classes = useStylesDrawer();
@@ -307,7 +304,7 @@ function Index({ history }) {
             let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
             let data = await res.json();
             if (data.message.loggedout) {
-
+                Auth.logOut();
                 history.replace("/");
                 dispach(user({ loggedin: false }));
 
@@ -469,4 +466,4 @@ function Index({ history }) {
     )
 }
 
-export default Index
+export default Dashboard

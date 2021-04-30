@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./../Styles/dashboard.css";
-import "./../Styles/videos.css";
+import "./../Dashboard/dashboard.css";
+import "./videos.css";
 import "./modalAddVideo.css";
-import Logo from "./../Images/logo.png";
+import Logo from "./../../Images/logo.png";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -25,62 +25,17 @@ import { Switch } from "@material-ui/core";
 import { Dropdown } from "react-bootstrap";
 import { Avatar, Modal } from "@material-ui/core";
 
-import Grid from "@material-ui/core/Grid";
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import SubscriptionsSharpIcon from "@material-ui/icons/SubscriptionsSharp";
 import AssignmentTurnedInSharpIcon from "@material-ui/icons/AssignmentTurnedInSharp";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import SettingsSharpIcon from "@material-ui/icons/SettingsSharp";
 
-import Img from "./../videosImg/1.jpg";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
-import { user } from "../Actions";
 
-let data = {
-  videos: [
-    {
-      title: "hello World",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-    {
-      title: "Learn Java",
-      link: "http://www.google.com",
-      img: "./../videosImg/1.jpg",
-    },
-  ],
-};
+import { useDispatch, useSelector } from "react-redux";
+import { user } from "../../ReduxStore/Actions";
+import Auth from "../../Auth";
+
 
 const drawerWidth = 180;
 
@@ -260,7 +215,7 @@ function Videos({ history }) {
     let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
     let data = await res.json();
     if (data.message.loggedout) {
-
+      Auth.logOut();
       history.replace("/");
       dispach(user({ loggedin: false }));
 
@@ -365,33 +320,48 @@ function Videos({ history }) {
     };
     async function addVideo() {
       let formdata = new FormData();
-      if (!urlVideo) {
-        let file = document.getElementById("file");
-        formdata.append("videofile", file.files[0]);
-      }
-      else {
-        formdata.append("srcUrl", document.getElementById("url").value);
-      }
-
       let title = document.getElementById("title");
       let domains = document.getElementById("domains").value;
       let myHeaders = new Headers();
       myHeaders.append("CSRF-Token", User.csrftoken);
+      myHeaders.append("Content-Type", "multipart/formdata");
 
 
 
-      //if (fileInput.files)
-      //formdata.append("thumbnail", fileInput.files[0]);
+
+      if (!urlVideo) {
+        console.log("gggggggg");
+        let file = document.getElementById("file");
+        formdata.append("videofile", file.files[0]);
+        formdata.append("isGoogleVideo", "1");
+      }
+      else {
+        console.log("aaaaaaaaa");
+        formdata.append("srcUrl", document.getElementById("url").value);
+        formdata.append("isGoogleVideo", "0");
+      }
+
+
+
+      let fileInput = document.getElementById("thumbnail");
+      if (fileInput.files[0]) {
+        console.log(fileInput.files);
+        //formdata.append("thumbnail", fileInput.files[0]);
+        //console.log(fileInput.files[0]);
+      }
+
 
       formdata.append("title", title);
 
-      formdata.append("isGoogleVideo", "1");
+
       formdata.append("playInDomains", "privyplay.com fiddle.jshell.net jsfiddle.net " + domains);
       formdata.append("mediaType", "mp4");
 
       var requestOptions = {
         method: "PUT",
         headers: myHeaders,
+        credentials: "include",
+        withCredentials: true,
         body: formdata,
         redirect: "follow",
       };

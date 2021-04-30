@@ -1,12 +1,14 @@
 //test
 import './App.css';
 import { HashRouter, Route, Switch } from 'react-router-dom'
-import LoginPage from './Login/index'
-import RegisterPage from './Register/index'
-import DashboardPage from './Dashboard/index'
-import ForgotPassPage from './ForgotPass/index'
-import SettingsPage from './Settings/index'
-import VideosPage from './Videos'
+import LoginPage from './Pages/Login/Login'
+import RegisterPage from './Pages/Register/Register'
+import DashboardPage from './Pages/Dashboard/Dashboard'
+import ForgotPassPage from './Pages/ForgotPass/ForgotPass'
+import SettingsPage from './Pages/Settings/Settings'
+import VideosPage from './Pages/Videos/Videos'
+import ProtectedRoute from './ProtectedRoute';
+import FourOFour from './Pages/FourOFour/FourOFour'
 function App() {
     return (
         <HashRouter basename='/'>
@@ -14,10 +16,11 @@ function App() {
                 <Switch>
                     <Route exact path='/' component={LoginPage} />
                     <Route exact path='/register' component={RegisterPage} />
-                    <Route exact path='/dashboard' component={DashboardPage} />
+                    <ProtectedRoute exact path='/dashboard' Compoent={DashboardPage} />
                     <Route exact path='/passrecovery' component={ForgotPassPage} />
-                    <Route exact path='/settings' component={SettingsPage} />
-                    <Route exact path='/videos' component={VideosPage} />
+                    <ProtectedRoute exact path='/settings' Compoent={SettingsPage} />
+                    <ProtectedRoute exact path='/videos' Compoent={VideosPage} />
+                    <Route path='*' component={FourOFour} />
 
                 </Switch>
             </div>

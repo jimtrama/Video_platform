@@ -1,26 +1,26 @@
 @font-face {
     font-family: Roboto;
-    src: url('./../Fonts/Roboto/Roboto-Black.ttf');
+    src: url('./../../Fonts/Roboto/Roboto-Black.ttf');
 }
 
 @font-face {
     font-family: RobotoBold;
-    src: url('./../Fonts/Roboto/Roboto-Bold.ttf');
+    src: url('./../../Fonts/Roboto/Roboto-Bold.ttf');
 }
 
 @font-face {
     font-family: RobotoMedium;
-    src: url('./../Fonts/Roboto/Roboto-Medium.ttf');
+    src: url('./../../Fonts/Roboto/Roboto-Medium.ttf');
 }
 
 @font-face {
     font-family: RobotoLight;
-    src: url('./../Fonts/Roboto/Roboto-Light.ttf');
+    src: url('./../../Fonts/Roboto/Roboto-Light.ttf');
 }
 
 @font-face {
     font-family: RobotoRegular;
-    src: url('./../Fonts/Roboto/Roboto-Regular.ttf');
+    src: url('./../../Fonts/Roboto/Roboto-Regular.ttf');
 }
 
 .logoContainer {
@@ -35,7 +35,7 @@
 }
 
 .logoImg {
-    background-image: url('./../Images/logo.png');
+    background-image: url('./../../Images/logo.png');
     background-repeat: no-repeat;
     background-size: contain;
     min-height: 64px;

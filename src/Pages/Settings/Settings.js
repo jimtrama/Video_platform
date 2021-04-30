@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import './../Styles/dashboard.css'
+import './../Dashboard/dashboard.css'
 
-import Logo from './../Images/logo.png'
+import Logo from './../../Images/logo.png'
 
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -27,7 +27,8 @@ import SubscriptionsSharpIcon from '@material-ui/icons/SubscriptionsSharp';
 import AssignmentTurnedInSharpIcon from '@material-ui/icons/AssignmentTurnedInSharp';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 import { useDispatch, useSelector } from 'react-redux';
-import { user } from '../Actions';
+import { user } from '../../ReduxStore/Actions';
+import Auth from '../../Auth';
 
 
 
@@ -291,7 +292,7 @@ function Settings({ history }) {
         let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
         let data = await res.json();
         if (data.message.loggedout) {
-
+            Auth.logOut();
             history.replace("/");
             dispach(user({ loggedin: false }));
 
