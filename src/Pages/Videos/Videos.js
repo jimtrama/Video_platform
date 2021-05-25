@@ -152,7 +152,7 @@ function Videos({ history }) {
       };
 
       let res = await fetch(
-        process.env.REACT_APP_API_BASE + "/account/rest-api/getVideos/all/20/asc",
+        process.env.REACT_APP_API_BASE + "/account/rest-api/getVideos/all/50/asc",
         requestOptions
       )
       let dataAll = await res.json();
@@ -320,23 +320,25 @@ function Videos({ history }) {
     };
     async function addVideo() {
       let formdata = new FormData();
-      let title = document.getElementById("title");
+      let title = document.getElementById("title").value;
       let domains = document.getElementById("domains").value;
+      //domains += " ";
       let myHeaders = new Headers();
       myHeaders.append("CSRF-Token", User.csrftoken);
-      myHeaders.append("Content-Type", "multipart/formdata");
+      //myHeaders.append("Content-Type", "multipart/formdata");
 
 
 
 
       if (!urlVideo) {
-        console.log("gggggggg");
+        console.log("local file uplaoding");
         let file = document.getElementById("file");
         formdata.append("videofile", file.files[0]);
+        console.log(file.files[0]);
         formdata.append("isGoogleVideo", "1");
       }
       else {
-        console.log("aaaaaaaaa");
+        console.log("url file uploading");
         formdata.append("srcUrl", document.getElementById("url").value);
         formdata.append("isGoogleVideo", "0");
       }
@@ -345,8 +347,8 @@ function Videos({ history }) {
 
       let fileInput = document.getElementById("thumbnail");
       if (fileInput.files[0]) {
-        console.log(fileInput.files);
-        //formdata.append("thumbnail", fileInput.files[0]);
+        console.log(fileInput.files[0]);
+        formdata.append("thumbnail", fileInput.files[0]);
         //console.log(fileInput.files[0]);
       }
 
@@ -354,7 +356,7 @@ function Videos({ history }) {
       formdata.append("title", title);
 
 
-      formdata.append("playInDomains", "privyplay.com fiddle.jshell.net jsfiddle.net " + domains);
+      formdata.append("playInDomains", "privy-rabbit.club privyplay.com fiddle.jshell.net jsfiddle.net " + domains.trim());
       formdata.append("mediaType", "mp4");
 
       var requestOptions = {
@@ -372,6 +374,9 @@ function Videos({ history }) {
       );
       let data = await res.json();
       console.log(data);
+      if (data.success) {
+        window.location.reload();
+      }
     }
     return (
       <div className="addVideoModalContainer">
