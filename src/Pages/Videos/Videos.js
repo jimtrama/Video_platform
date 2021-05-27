@@ -352,9 +352,9 @@ function Videos({ history }) {
       }
 
       if (domains) {
-        formdata.append("playInDomains", "privy-rabbit.club privyplay.com fiddle.jshell.net jsfiddle.net " + domains.trim());
+        formdata.append("playInDomains", "privy-rabbit.club privyplay.com jsfiddle.net " + domains.trim());//fiddle.jshell.net
       } else {
-        formdata.append("playInDomains", "privy-rabbit.club privyplay.com fiddle.jshell.net jsfiddle.net");
+        formdata.append("playInDomains", "privy-rabbit.club privyplay.com jsfiddle.net");
       }
 
       formdata.append("mediaType", "mp4");
