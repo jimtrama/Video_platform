@@ -69,7 +69,7 @@ function Index(props) {
 
     function validateEmail(email) {
         if (email.match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i) == null) {
-            console.log('not mail');
+
             document.getElementById('email').classList.remove('correct');
             document.getElementById('email').classList.add('wrong');
             setAlert(true);
@@ -134,7 +134,7 @@ function Index(props) {
     }
     function validateUsername(username) {
         if (username.length < 4) {
-            console.log('username must contain at least 4 characters');
+
             document.getElementById('username').classList.remove('correct');
             document.getElementById('username').classList.add('wrong');
             setAlert(true);
@@ -165,7 +165,7 @@ function Index(props) {
             setButtonDisable(false);
             return true;
         } else {
-            console.log('websire error');
+
             document.getElementById('website').classList.remove('correct');
             document.getElementById('website').classList.add('wrong');
             setAlert(true);
@@ -215,9 +215,9 @@ function Index(props) {
         }
         let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/signup', body);
         let data = await res.json();
-        console.log(data);
+
         if (data.success == true) {
-            console.log('successful register');
+
             //show a message login in that usr coming from register succeful
             props.history.replace('/');
         } else if (data.message.error == 'EEMAILEXISTS') {

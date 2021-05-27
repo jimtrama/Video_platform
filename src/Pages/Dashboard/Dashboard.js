@@ -131,9 +131,15 @@ const useStylesCards = makeStyles({
         width: '100%',
         borderRadius: '17px',
         backgroundColor: "#f2eeef",
-        boxShadow: 'none !important'
+        boxShadow: 'none !important',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between"
     },
     title: {
+        width: "fit-content",
+        margin: "auto",
         fontSize: '18px',
         fontWeight: '750',
         color: "#fca676"
@@ -142,6 +148,8 @@ const useStylesCards = makeStyles({
         marginBottom: 12
     },
     number: {
+        width: "fit-content",
+        margin: "auto",
         fontSize: 60,
         fontWeight: '800',
         color: "#fca676",
@@ -149,6 +157,8 @@ const useStylesCards = makeStyles({
 
     },
     video: {
+        width: "fit-content",
+        margin: "auto",
         fontSize: '18px',
         fontWeight: '750',
         color: '#fca676'
@@ -301,7 +311,11 @@ function Dashboard({ history }) {
         async function LogOut() {
             //Logout happens
 
-            let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
+            let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout", {
+                method: "GET",
+                credentials: "include",
+                withCredentials: true
+            });
             let data = await res.json();
             if (data.message.loggedout) {
                 Auth.logOut();

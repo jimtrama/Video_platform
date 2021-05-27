@@ -21,7 +21,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { PublishRounded } from "@material-ui/icons";
 
-import { Switch } from "@material-ui/core";
+import { CircularProgress, Switch } from "@material-ui/core";
 import { Dropdown } from "react-bootstrap";
 import { Avatar, Modal } from "@material-ui/core";
 
@@ -108,7 +108,6 @@ const useStylesDrawer = makeStyles((theme) => ({
 }));
 function Videos({ history }) {
   let User = useSelector((state) => state.persistedStore.message);
-  console.log(User);
   const dispach = useDispatch();
   const mobileDrawer = window.innerWidth > 861;
   const classes = useStylesDrawer();
@@ -117,7 +116,7 @@ function Videos({ history }) {
   const [countVideos, setCountVideos] = useState(0);
   const [search, setSearch] = useState("");
   const [addVideoModal, setAddVideoModal] = useState(false);
-
+  const [loadingVideos, setLoadingVideos] = useState(true);
   const [data, setData] = useState([]);
   const [dataToShow, setDataToShow] = useState([]);
 
@@ -128,7 +127,7 @@ function Videos({ history }) {
       let myHeaders = new Headers();
       let strSeesion = "";
       let cookie = User.session;
-      console.log(cookie);
+
       let tempcountcookie = 0;
       for (let key in cookie) {
         if (tempcountcookie == 2) {
@@ -140,7 +139,7 @@ function Videos({ history }) {
         tempcountcookie++;
 
       }
-      console.log(strSeesion);
+
       setCookiesession(strSeesion)
       myHeaders.append("Cookie", strSeesion);
       let requestOptions = {
@@ -156,24 +155,29 @@ function Videos({ history }) {
         requestOptions
       )
       let dataAll = await res.json();
-      console.log(dataAll);
+
 
       requestOptions = {
         method: "GET",
         redirect: "follow",
         headers: myHeaders
       };
-      setCountVideos(dataAll.message.res.length)
       let tempArray = [];
-      for (let i = 0; i < dataAll.message.res.length; i++) {
-        res = await fetch(
-          process.env.REACT_APP_API_BASE + "/playback/poster/" + dataAll.message.res[i].documentId,
-          requestOptions
-        )
-        let dataThumb = await res.blob();
-        tempArray.push({ image: dataThumb, title: dataAll.message.res[i].title, id: dataAll.message.res[i].documentId });
+      if (dataAll.message.res) {
+        setCountVideos(dataAll.message.res.length)
+        for (let i = 0; i < dataAll.message.res.length; i++) {
+          res = await fetch(
+            process.env.REACT_APP_API_BASE + "/playback/poster/" + dataAll.message.res[i].documentId,
+            requestOptions
+          )
+          let dataThumb = await res.blob();
+          tempArray.push({ image: dataThumb, title: dataAll.message.res[i].title, id: dataAll.message.res[i].documentId });
+        }
       }
 
+
+
+      setLoadingVideos(false);
       setData(tempArray.reverse());
       setDataToShow(tempArray);
       //addzIndex();
@@ -196,8 +200,8 @@ function Videos({ history }) {
     setAddVideoModal(true);
   }
   function Search(input) {
-    console.log(data);
-    console.log(input);
+
+
     let tempArr = [];
     input = input.toLowerCase().trim();
     for (let video of data) {
@@ -212,7 +216,11 @@ function Videos({ history }) {
   async function LogOut() {
     //Logout happens
 
-    let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
+    let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout", {
+      method: "GET",
+      credentials: "include",
+      withCredentials: true
+    });
     let data = await res.json();
     if (data.message.loggedout) {
       Auth.logOut();
@@ -267,18 +275,34 @@ function Videos({ history }) {
     setvideoOfOptions({});
 
   };
-  function Edit() { }
-  function Delete() {
-    let tempArra = dataToShow;
-    tempArra.splice(videoOfOptions.i, 1);
-    handelOptionsClose();
-    setDataToShow(tempArra);
+
+  async function Delete() {
+    let myHeaders = new Headers();
+    myHeaders.append("CSRF-Token", User.csrftoken);
+
+    let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/deleteVideo/" + videoOfOptions.video.id,
+      {
+        method: "DELETE",
+
+        credentials: "include",
+        headers: myHeaders
+      })
+    let data = await res.json();
+    if (data.success) {
+      let tempArra = dataToShow;
+      tempArra.splice(videoOfOptions.i, 1);
+      handelOptionsClose();
+      setDataToShow(tempArra);
+      setCountVideos(countVideos - 1);
+
+    }
+
 
   }
   function GetLink() {
 
     const el = document.createElement('textarea');
-    el.value = "http://privy-rabbit.club/playback/" + videoOfOptions.video.id;
+    el.value = "http://privy-rabbit.club/#/video?id=" + videoOfOptions.video.id;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
@@ -294,6 +318,121 @@ function Videos({ history }) {
     }, 1500)
 
 
+  }
+  function EditVideoModal() {
+    const [openModal, setOpenModal] = useState(false);
+    const [textThumbnail, setTextThumbnail] = useState(null);
+    const handleOpenModal = () => {
+      setOpenModal(true);
+
+    };
+    const handleCloseModal = () => {
+      setOpenModal(false);
+    };
+
+
+    async function editVideo() {
+
+      let myHeaders = new Headers();
+      //myHeaders.append('content-type', "multipart/form-data")
+      myHeaders.append("CSRF-Token", User.csrftoken);
+      let formdata = new FormData();
+      let title = document.getElementById("titlenew").value;
+      let domains = document.getElementById("domainsnew").value;
+
+      let fileInput = document.getElementById("thumbnailnew");
+      if (fileInput.files[0]) {
+        formdata.append("thumbnail", fileInput.files[0]);
+      }
+
+      if (title) {
+        formdata.append("title", title);
+      } else {
+        formdata.append("title", videoOfOptions.video.title);
+      }
+
+      if (domains) {
+        formdata.append("playInDomains", "privy-rabbit.club privyplay.com fiddle.jshell.net jsfiddle.net " + domains.trim());
+      } else {
+        formdata.append("playInDomains", "privy-rabbit.club privyplay.com fiddle.jshell.net jsfiddle.net");
+      }
+
+      formdata.append("mediaType", "mp4");
+
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        credentials: "include",
+        withCredentials: true,
+        body: formdata,
+        redirect: "follow",
+      };
+
+      let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/editVideo/" + videoOfOptions.video.id,
+        requestOptions)
+      let data = await res.json();
+
+
+      if (data.success) {
+        window.location.reload();
+      }
+    }
+    return (
+      <div className="addVideoModalContainer">
+        <button onClick={handleOpenModal}>
+          Edit Video
+        </button>
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <div className="addVideoContainer">
+
+            <div className="inputContainerFirst">
+              <span>Title</span>
+              <input id="titlenew" className="addVideoTitle" placeholder="Title" />
+            </div>
+            <div className="inputContainerSec">
+              <span>Domains Accepted</span>
+              <input
+                id="domainsnew"
+                className="addVideoDomains"
+                placeholder="Domains Accepted"
+              />
+            </div>
+
+            <div className="filesContainer">
+
+
+
+              <div className="inputContainer">
+                <div className="filePicker">
+                  <PublishRounded />
+                  <label for="thumbnailnew" className="labelFileInput">
+                    <span>
+                      {textThumbnail ? textThumbnail : "Choose Thumbnail"}
+                    </span>
+                  </label>
+                </div>
+                <input
+                  style={{ display: "none" }}
+                  id="thumbnailnew"
+                  onChange={(e) => {
+                    setTextThumbnail(e.target.files[0].name);
+                  }}
+                  className="addVideoFile"
+                  type="file"
+                />
+              </div>
+            </div>
+
+
+            <button className="addVideoBtn" onClick={editVideo}>
+              Edit Video
+            </button>
+
+          </div>
+        </Modal>
+      </div>
+    );
   }
   function AddVideoModal() {
     const [openModal, setOpenModal] = useState(false);
@@ -331,14 +470,14 @@ function Videos({ history }) {
 
 
       if (!urlVideo) {
-        console.log("local file uplaoding");
+
         let file = document.getElementById("file");
         formdata.append("videofile", file.files[0]);
-        console.log(file.files[0]);
+
         formdata.append("isGoogleVideo", "1");
       }
       else {
-        console.log("url file uploading");
+
         formdata.append("srcUrl", document.getElementById("url").value);
         formdata.append("isGoogleVideo", "0");
       }
@@ -347,9 +486,9 @@ function Videos({ history }) {
 
       let fileInput = document.getElementById("thumbnail");
       if (fileInput.files[0]) {
-        console.log(fileInput.files[0]);
+
         formdata.append("thumbnail", fileInput.files[0]);
-        //console.log(fileInput.files[0]);
+        //
       }
 
 
@@ -373,7 +512,7 @@ function Videos({ history }) {
         requestOptions
       );
       let data = await res.json();
-      console.log(data);
+
       if (data.success) {
         window.location.reload();
       }
@@ -602,11 +741,9 @@ function Videos({ history }) {
               </div>
               <div
                 className="showOptionsConteiner"
-                onClick={() => {
-                  Edit();
-                }}
+
               >
-                <span>Edit</span>
+                <EditVideoModal />
               </div>
               <div
                 className="showOptionsConteiner"
@@ -645,6 +782,7 @@ function Videos({ history }) {
 
           <AddVideoModal />
 
+
           <div className="countVideoContainer">
             <span className="countVideolabel">Total Videos</span>
             <span className="countVideosVariable" id="countVideos">
@@ -652,35 +790,45 @@ function Videos({ history }) {
             </span>
           </div>
         </div>
-        <div className="videosContainer">
-          {dataToShow.map((value, i) => {
-            let tempImg;
+        {
+          loadingVideos ? (
+            <div style={{ position: "absolute", top: "60%", left: "50%", transform: "translate(-50%,-50%)" }}>
+              <CircularProgress size={100} />
+            </div>
+          ) : (
+            <div className="videosContainer">
 
-            const url = URL.createObjectURL(value.image)
-            tempImg = url;
+              {dataToShow.map((value, i) => {
+                let tempImg;
+
+                const url = URL.createObjectURL(value.image)
+                tempImg = url;
 
 
-            return (
-              <div className="videoCard">
-                <span className="videoTitle">{value.title}</span>
-                <div className="videoImg">
-                  <img src={tempImg}></img>
-                </div>
-                <div className="moreOptionsContainer">
-                  <MoreHorizIcon
-                    className="videoOptions"
-                    onClick={() => {
-                      handelOptionsOpen(value, i);
-                    }}
-                  />
+                return (
+                  <div className="videoCard">
+                    <span className="videoTitle">{value.title}</span>
+                    <div className="videoImg">
+                      <img src={tempImg}></img>
+                    </div>
+                    <div className="moreOptionsContainer">
+                      <MoreHorizIcon
+                        className="videoOptions"
+                        onClick={() => {
+                          handelOptionsOpen(value, i);
+                        }}
+                      />
 
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )
+        }
+
       </main>
-    </div>
+    </div >
   );
 }
 

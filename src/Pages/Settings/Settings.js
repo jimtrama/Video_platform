@@ -202,7 +202,7 @@ function Settings({ history }) {
 
     function validateEmail(email) {
         if (email.match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i) == null) {
-            console.log('not mail');
+
             document.getElementById('email').classList.remove('correct');
             document.getElementById('email').classList.add('wrong');
             setAlert(true);
@@ -265,7 +265,7 @@ function Settings({ history }) {
     }
     function validateUsername(username) {
         if (username.length < 4) {
-            console.log('username must contain at least 4 characters');
+
             document.getElementById('username').classList.remove('correct');
             document.getElementById('username').classList.add('wrong');
             setAlert(true);
@@ -289,7 +289,11 @@ function Settings({ history }) {
     async function LogOut() {
         //Logout happens
 
-        let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout");
+        let res = await fetch(process.env.REACT_APP_API_BASE + "/account/rest-api/logout", {
+            method: "GET",
+            credentials: "include",
+            withCredentials: true
+        });
         let data = await res.json();
         if (data.message.loggedout) {
             Auth.logOut();
@@ -306,7 +310,7 @@ function Settings({ history }) {
             let myHeaders = new Headers();
             myHeaders.append("CSRF-Token", UserData.message.csrftoken);
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-            console.log(UserData.message.csrftoken);
+
             let urlencoded = new URLSearchParams();
             urlencoded.append("email", email);
             urlencoded.append("password", confPassword);
@@ -318,10 +322,10 @@ function Settings({ history }) {
                 redirect: 'follow'
             };
 
-            console.log(requestOptions);
+
             let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/emailChangeRequest', requestOptions)
             let data = await res.json();
-            console.log(data);
+
         }
     }
 
@@ -332,7 +336,7 @@ function Settings({ history }) {
             let myHeaders = new Headers();
             myHeaders.append("CSRF-Token", UserData.message.csrftoken);
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-            console.log(UserData.message.csrftoken);
+
             let urlencoded = new URLSearchParams();
             urlencoded.append("email", email);
             urlencoded.append("password", confPassword);
@@ -344,10 +348,10 @@ function Settings({ history }) {
                 redirect: 'follow'
             };
 
-            console.log(requestOptions);
+
             let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/emailChangeRequest', requestOptions)
             let data = await res.json();
-            console.log(data);
+
         }
 
     }
@@ -357,7 +361,7 @@ function Settings({ history }) {
             let myHeaders = new Headers();
             myHeaders.append("CSRF-Token", UserData.message.csrftoken);
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-            console.log(UserData.message.csrftoken);
+
             let urlencoded = new URLSearchParams();
             urlencoded.append("newPassword", password);
             urlencoded.append("password", confPassword);
@@ -369,10 +373,10 @@ function Settings({ history }) {
                 redirect: 'follow'
             };
 
-            console.log(requestOptions);
+
             let res = await fetch(process.env.REACT_APP_API_BASE + '/account/rest-api/passwordChangeRequest', requestOptions)
             let data = await res.json();
-            console.log(data);
+
         }
     }
 

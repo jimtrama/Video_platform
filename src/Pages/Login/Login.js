@@ -66,7 +66,7 @@ function Settings(props) {
     return true;
   }
   function passwordValidate(password) {
-    console.log("run");
+
     if (password.length != 0) {
       document.getElementById("loginButton").classList.add("cursor");
       document.getElementById("loginButton").classList.remove("not-allowed");
@@ -101,27 +101,28 @@ function Settings(props) {
 
 
       let data = await res.json();
-      console.log(data);
+
 
       if (data.success == true) {
         if ((data.message.userActive = true)) {
+
           dispach(user(data));
           auth.logIn();
           props.history.replace("/dashboard");
 
 
         } else {
-          console.log("plesea verify email");
+
           setAlert(true);
         }
       } else {
         if (data.message.error == "EWRONGDATA") {
-          console.log("wrong username or password");
+
           setAlert(true);
           setErrorType("ipass");
         }
         if (data.message.error == "EINVALIDDATA") {
-          console.log("passlength");
+
           setAlert(true);
           setErrorType("wpassl");
         }
