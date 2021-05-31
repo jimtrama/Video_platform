@@ -20,6 +20,7 @@ function Settings(props) {
 
   useEffect(() => {
     setLoaded(true);
+
   }, []);
 
   function MyAlert() {

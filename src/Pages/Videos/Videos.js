@@ -151,7 +151,7 @@ function Videos({ history }) {
       };
 
       let res = await fetch(
-        process.env.REACT_APP_API_BASE + "/account/rest-api/getVideos/all/50/asc",
+        process.env.REACT_APP_API_BASE + "/account/rest-api/getVideos/all/5000/asc",
         requestOptions
       )
       let dataAll = await res.json();
@@ -302,7 +302,7 @@ function Videos({ history }) {
   function GetLink() {
 
     const el = document.createElement('textarea');
-    el.value = "http://privy-rabbit.club/#/video?id=" + videoOfOptions.video.id;
+    el.value = process.env.REACT_APP_GET_LINK + "?id=" + videoOfOptions.video.id;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
@@ -352,9 +352,9 @@ function Videos({ history }) {
       }
 
       if (domains) {
-        formdata.append("playInDomains", "privy-rabbit.club privyplay.com jsfiddle.net " + domains.trim());//fiddle.jshell.net
+        formdata.append("playInDomains", "privy-rabbit.club privyplay.com " + domains.trim());//fiddle.jshell.net
       } else {
-        formdata.append("playInDomains", "privy-rabbit.club privyplay.com jsfiddle.net");
+        formdata.append("playInDomains", "privy-rabbit.club privyplay.com ");
       }
 
       formdata.append("mediaType", "mp4");
@@ -495,7 +495,7 @@ function Videos({ history }) {
       formdata.append("title", title);
 
 
-      formdata.append("playInDomains", "privy-rabbit.club privyplay.com fiddle.jshell.net jsfiddle.net " + domains.trim());
+      formdata.append("playInDomains", "privy-rabbit.club privyplay.com " + domains.trim());
       formdata.append("mediaType", "mp4");
 
       var requestOptions = {
